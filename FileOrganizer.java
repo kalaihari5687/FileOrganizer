@@ -10,24 +10,42 @@ public class FileOrganizer extends JFrame {
 
     private DefaultTableModel tableModel;
     private JTable table;
-
     private final Path dbFile = Paths.get(System.getProperty("user.home"), ".file_organizer", "tags.db");
     private final Map<String, Set<String>> tagDB = new HashMap<>();
 
     public FileOrganizer() {
-        setTitle("File Organizer with Tags");
+
+        // ==== NEON DARK THEME ====
+        Color bg = new Color(18, 18, 18);
+        Color panel = new Color(26, 26, 26);
+        Color neon = new Color(0, 255, 255);
+        Color text = new Color(230, 230, 230);
+
+        UIManager.put("Table.background", panel);
+        UIManager.put("Table.foreground", text);
+        UIManager.put("Table.selectionBackground", neon);
+        UIManager.put("Table.selectionForeground", Color.black);
+        UIManager.put("Panel.background", panel);
+        UIManager.put("Label.foreground", neon);
+        UIManager.put("Button.background", new Color(20,20,40));
+        UIManager.put("Button.foreground", neon);
+        UIManager.put("TextField.background", new Color(40,40,40));
+        UIManager.put("TextField.foreground", text);
+
+        setTitle("File Organizer — Neon Mode");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(bg);
         setLocationRelativeTo(null);
 
         loadDB();
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton addFilesBtn = new JButton("Add Files");
-        JButton refreshBtn = new JButton("Refresh");
+        JButton addFilesBtn = new JButton("➕ Add Files");
+        JButton refreshBtn = new JButton("🔄 Refresh");
         JTextField searchField = new JTextField(12);
-        JButton searchBtn = new JButton("Search Tag");
-        JButton organizeBtn = new JButton("Organize");
+        JButton searchBtn = new JButton("🔍 Search Tag");
+        JButton organizeBtn = new JButton("📂 Organize");
         top.add(addFilesBtn); top.add(refreshBtn);
         top.add(new JLabel("Tag:")); top.add(searchField); top.add(searchBtn); top.add(organizeBtn);
 
@@ -36,13 +54,16 @@ public class FileOrganizer extends JFrame {
             public boolean isCellEditable(int r, int c) { return c == 0; }
         };
         table = new JTable(tableModel);
+        table.setShowGrid(false);
+        table.setRowHeight(28);
         table.getColumnModel().getColumn(0).setMaxWidth(60);
         JScrollPane scroll = new JScrollPane(table);
+        scroll.getViewport().setBackground(panel);
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JTextField tagField = new JTextField(20);
-        JButton addTagBtn = new JButton("Add Tag");
-        JButton removeTagBtn = new JButton("Remove Tag");
+        JButton addTagBtn = new JButton("✨ Add Tag");
+        JButton removeTagBtn = new JButton("🔥 Remove Tag");
         bottom.add(new JLabel("Tag:")); bottom.add(tagField); bottom.add(addTagBtn); bottom.add(removeTagBtn);
 
         add(top, BorderLayout.NORTH);
@@ -140,4 +161,3 @@ public class FileOrganizer extends JFrame {
         SwingUtilities.invokeLater(() -> new FileOrganizer().setVisible(true));
     }
 }
-
